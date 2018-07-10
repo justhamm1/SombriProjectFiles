@@ -14224,6 +14224,11 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 74ac04ca1b595e340be0754d64a18620, type: 3}
+--- !u!1 &468987420 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1902671562905796, guid: 5ba57ca642aabd2469dce90a86e6aa55,
+    type: 2}
+  m_PrefabInternal: {fileID: 790060518}
 --- !u!1 &476327633
 GameObject:
   m_ObjectHideFlags: 0
@@ -29457,7 +29462,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 40
+  field of view: 31.890793
   orthographic: 0
   orthographic size: 10
   m_Depth: 0
@@ -63657,6 +63662,8 @@ GameObject:
   - component: {fileID: 2124480713}
   - component: {fileID: 2124480712}
   - component: {fileID: 2124480711}
+  - component: {fileID: 2124480714}
+  - component: {fileID: 2124480715}
   m_Layer: 0
   m_Name: CM vcam1
   m_TagString: Untagged
@@ -63719,6 +63726,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2124480714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2124480710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4700f9f03ad19f94baf0367cb7a9c988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Width: 20
+  m_Damping: 8.85
+  m_MinFOV: 1
+  m_MaxFOV: 70
+--- !u!114 &2124480715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2124480710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fba5b66ef911ee343863acbeb0952d3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 468987420}
+  playerVelocity: 0
 --- !u!1 &2132649830
 GameObject:
   m_ObjectHideFlags: 0
