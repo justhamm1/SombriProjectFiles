@@ -42,6 +42,9 @@ public class PlayerContorller : MonoBehaviour {
 	public AudioClip[] stabs;
 	public bool hasUmbrella;
 	public static bool isPaused;
+	public float velocityStore;
+
+	public GameObject umbrella;
 
 	void Start () {
 		sound = GetComponent<AudioSource> ();
@@ -49,7 +52,7 @@ public class PlayerContorller : MonoBehaviour {
 	}
 	
 
-	void FixedUpdate () {
+	void Update () {
 
 		if (isPaused) {
 			Time.timeScale = 0;
@@ -138,6 +141,7 @@ public class PlayerContorller : MonoBehaviour {
 					if (swaangsLeft > 0) {
 						if (!cantStab) {
 							if (Input.GetButtonDown ("Fire2")) {
+								velocityStore = Mathf.Abs(rb.velocity.x) + Mathf.Abs(rb.velocity.y);
 								rb.isKinematic = true;
 								isHolding = true;
 								Invoke ("Drop", holdTime);
@@ -164,6 +168,18 @@ public class PlayerContorller : MonoBehaviour {
 					}
 				}
 			}
+		}
+			
+		umbrella.transform.rotation = Quaternion.Euler (0, 0, x * -80f);
+		if (Input.GetButton ("Fire3")) {
+			rb.drag = 8;
+			umbrella.SetActive (true);
+			diForce = 130;
+		}
+		if (Input.GetButtonUp ("Fire3") || isHolding || !inAir) {
+			rb.drag = 0;
+			umbrella.SetActive (false);
+			diForce = 40;
 		}
 }
 	void NotHolding(){

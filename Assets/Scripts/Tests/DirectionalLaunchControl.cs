@@ -9,7 +9,6 @@ public class DirectionalLaunchControl : MonoBehaviour {
 	public GameObject arrowHolderHolder;
 	PlayerContorller contorller;
 	Rigidbody rb;
-	//public GameObject velocityCenter;
 	public float rotationSpeed;
 	public float rotSpeedIncr;
 	public float maxRotSpeed;
@@ -24,13 +23,14 @@ public class DirectionalLaunchControl : MonoBehaviour {
 		contorller = GetComponent<PlayerContorller> ();
 		rb = GetComponent<Rigidbody> ();
 		arrowHolderHolder.transform.parent = null;
+
 	}
 
-	void LateUpdate () {
+	void Update () {
 		arrowHolderHolder.transform.rotation = Quaternion.identity;
 		arrowHolderHolder.transform.position = transform.position;
 
-		float x = contorller.x;
+		float x = Input.GetAxisRaw("Horizontal");
 
 		if (!contorller.isHolding) {
 
@@ -48,6 +48,7 @@ public class DirectionalLaunchControl : MonoBehaviour {
 			canFling = true;
 			float y = Input.GetAxisRaw("Vertical");
 			arrow.SetActive (true);
+
 			arrowDirection = Vector3.up * x + Vector3.right * -y;
 
 			if (arrowDirection.sqrMagnitude > 0.0f) {
@@ -68,6 +69,15 @@ public class DirectionalLaunchControl : MonoBehaviour {
 			if(!contorller.isFacingRight)
 				transform.Rotate (0, 0, -rotationSpeed);
 		}
+
+		if (contorller.swaangsLeft == 1) {
+			arrow.GetComponent<SpriteRenderer> ().color = Color.red;
+		}
+		if (contorller.swaangsLeft == 2) {
+			arrow.GetComponent<SpriteRenderer> ().color = Color.green;
+		}
+
+
 	}
 
 	void LetGo(){
@@ -79,6 +89,10 @@ public class DirectionalLaunchControl : MonoBehaviour {
 	void AnimationStall(){
 		startRotating = true;
 		StartCoroutine (IncreaseRotationSpeed ());
+		if (contorller.velocityStore > 11) {
+			contorller.velocityStore = 10;
+		}
+		rotationSpeed = contorller.velocityStore;
 	}
 
 	IEnumerator IncreaseRotationSpeed(){
@@ -92,8 +106,5 @@ public class DirectionalLaunchControl : MonoBehaviour {
 
 
 	}
-
-	void Update(){
-		arrowHolderHolder.transform.rotation = Quaternion.identity;
-	}
+		
 }
