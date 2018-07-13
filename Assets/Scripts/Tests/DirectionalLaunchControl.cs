@@ -26,7 +26,7 @@ public class DirectionalLaunchControl : MonoBehaviour {
 
 	}
 
-	void Update () {
+	void FixedUpdate () {
 		arrowHolderHolder.transform.rotation = Quaternion.identity;
 		arrowHolderHolder.transform.position = transform.position;
 

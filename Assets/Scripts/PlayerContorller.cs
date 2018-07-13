@@ -35,6 +35,7 @@ public class PlayerContorller : MonoBehaviour {
 	public bool isHolding;
 	bool calledLatDrag;
 	bool done;
+	bool hitGround;
 
 	AudioSource sound;
 	public AudioClip[] jumps;
@@ -45,14 +46,16 @@ public class PlayerContorller : MonoBehaviour {
 	public float velocityStore;
 
 	public GameObject umbrella;
+	public GameObject wallChecker;
 
 	void Start () {
 		sound = GetComponent<AudioSource> ();
 		rb = GetComponent<Rigidbody> ();
+
 	}
 	
 
-	void Update () {
+	void FixedUpdate () {
 
 		if (isPaused) {
 			Time.timeScale = 0;
@@ -62,7 +65,6 @@ public class PlayerContorller : MonoBehaviour {
 			Time.timeScale = 1;
 			Cursor.visible = false;
 //Player Movement--------------------------
-			x = Input.GetAxis ("Horizontal") * speed * Time.deltaTime;
 
 			if (!isHolding) {
 				if (x > 0) {
@@ -74,21 +76,12 @@ public class PlayerContorller : MonoBehaviour {
 					transform.GetChild (0).localRotation = Quaternion.Euler (0, 180, 0);
 				}
 			}
-
-			if (!inAir) {
-				latDrag = 1;
-				swaangsLeft = maxSwaangs;
-				calledLatDrag = false;
-				if (!isHolding) {
-					transform.Translate (x, 0, 0);	
-				}
-				rb.velocity = new Vector3 (0, rb.velocity.y, 0);
-			} 
-			if (inAir && !canJump) {
+				
+			if (inAir) {
 				if (!isHolding) {
 					transform.Translate (x / latDrag, 0, 0);
 					rb.AddForce (x * diForce, 0, 0);
-
+					wallChecker.SetActive (false);
 				}
 				if (!calledLatDrag) {
 					calledLatDrag = true;
@@ -98,20 +91,9 @@ public class PlayerContorller : MonoBehaviour {
 			}
 
 
-			if (Input.GetButtonDown ("Fire1")) {
-				if (canJump) {
-					canJump = false;
-					jumpHeld = true;
-					Invoke ("StopJump", jumpTime);
-					int randy = Random.Range (0, jumps.Length);
-					sound.PlayOneShot (jumps [randy]);
-				}
-			}
-			if (Input.GetButtonUp ("Fire1")) {
-				jumpHeld = false;
-			}
 			if (jumpHeld) {
-				rb.AddForce (0, jumpForce, 0);
+				rb.velocity = new Vector3 (0, jumpForce, 0);
+				jumpForce = jumpForce*1.3f;
 			}
 
 //Check if on ground--------------------------
@@ -127,61 +109,96 @@ public class PlayerContorller : MonoBehaviour {
 					canJump = true;
 					inAir = false;
 					isFalling = false;
-
 				}
+
 				if (hit.distance >= jumpResetDistance) {
 					canJump = false;
 					inAir = true;
+					hitGround = false;
 				}
 			}
-
-//This one fucks your mom--------------------
-			if (inAir) {
-				if (hasUmbrella) {
-					if (swaangsLeft > 0) {
-						if (!cantStab) {
-							if (Input.GetButtonDown ("Fire2")) {
-								velocityStore = Mathf.Abs(rb.velocity.x) + Mathf.Abs(rb.velocity.y);
-								rb.isKinematic = true;
-								isHolding = true;
-								Invoke ("Drop", holdTime);
-								isFalling = false;
-								int randy = Random.Range (0, stabs.Length);
-								sound.Stop ();
-								sound.PlayOneShot (stabs [randy]);
-								Instantiate (rocks, transform.position, Quaternion.identity);
-							}
-							if (!Input.GetButton ("Fire2") && isHolding) {
-								rb.isKinematic = false;
-								isHolding = false;
-								swaangsLeft--;
-								CancelInvoke ("Drop");
-								Invoke ("NotHolding", 0.01f);
-							}
-						}
-						if (cantStab) {
-							if (Input.GetButtonDown ("Fire2")) {
-								int randy = Random.Range (0, stabs.Length);
-								Instantiate (sparks, transform.position, Quaternion.identity);
-							}
-						}
-					}
-				}
-			}
-		}
 			
 		umbrella.transform.rotation = Quaternion.Euler (0, 0, x * -80f);
 		if (Input.GetButton ("Fire3")) {
 			rb.drag = 8;
 			umbrella.SetActive (true);
-			diForce = 130;
+			diForce = 140;
 		}
 		if (Input.GetButtonUp ("Fire3") || isHolding || !inAir) {
 			rb.drag = 0;
 			umbrella.SetActive (false);
-			diForce = 40;
+			diForce = 50;
 		}
+
+	}//Not Paused --------------
 }
+
+	void Update(){
+
+		x = Input.GetAxis ("Horizontal") * speed * Time.deltaTime;
+
+		if (!inAir) {
+			latDrag = 1;
+			swaangsLeft = maxSwaangs;
+			calledLatDrag = false;
+			if (!isHolding) {
+				transform.Translate (x, 0, 0);	
+			}
+		} 
+
+
+		if (Input.GetButtonDown("Fire1")) {
+			if (canJump) {
+				rb.velocity = new Vector3 (0, 0, 0);
+				canJump = false;
+				jumpHeld = true;
+				Invoke ("StopJump", jumpTime);
+				int randy = Random.Range (0, jumps.Length);
+				sound.PlayOneShot (jumps [randy]);
+			}
+		}
+		if (Input.GetButtonUp ("Fire1")) {
+			jumpHeld = false;
+			CancelInvoke ("StopJump");
+			jumpForce = 3;
+		}
+
+
+		if (inAir) {
+			if (hasUmbrella) {
+				if (swaangsLeft > 0) {
+					if (!cantStab) {
+						if (Input.GetButtonDown ("Fire2")) {
+							velocityStore = Mathf.Abs(rb.velocity.x) + Mathf.Abs(rb.velocity.y);
+							rb.isKinematic = true;
+							isHolding = true;
+							wallChecker.SetActive (true);
+							Invoke ("Drop", holdTime);
+							isFalling = false;
+							int randy = Random.Range (0, stabs.Length);
+							sound.Stop ();
+							sound.PlayOneShot (stabs [randy]);
+							Instantiate (rocks, transform.position, Quaternion.identity);
+						}
+						if (!Input.GetButton ("Fire2") && isHolding) {
+							rb.isKinematic = false;
+							isHolding = false;
+							swaangsLeft--;
+							CancelInvoke ("Drop");
+							Invoke ("NotHolding", 0.01f);
+						}
+					}
+					if (cantStab) {
+						if (Input.GetButtonDown ("Fire2")) {
+							int randy = Random.Range (0, stabs.Length);
+							Instantiate (sparks, transform.position, Quaternion.identity);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	void NotHolding(){
 		rb.isKinematic = false;
 		isHolding = false;
@@ -190,15 +207,14 @@ public class PlayerContorller : MonoBehaviour {
 
 	IEnumerator IncreaseLatDrag(){
 		yield return new WaitForSeconds (0.1f);
-
-		latDrag += dragIncr; // =manInDrag;
-
-		if (latDrag < maxLatDrag)
+		latDrag += dragIncr;
+		if (latDrag < maxLatDrag-0.1f)
 			StartCoroutine (IncreaseLatDrag ());
 	}
 
 	void StopJump(){
 		jumpHeld = false;
+		jumpForce = 1;
 	}
 		
 	void OnCollisionEnter(Collision other){

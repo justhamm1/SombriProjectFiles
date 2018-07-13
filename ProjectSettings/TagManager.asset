@@ -8,6 +8,8 @@ TagManager:
   - Spikes
   - Umbrella
   - Scene
+  - Walls
+  - Wind
   layers:
   - Default
   - TransparentFX
