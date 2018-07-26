@@ -30,7 +30,7 @@ public class Inputs : MonoBehaviour {
 			if (Input.GetButtonDown ("Fire"+i)) {
 				fire [i] = true;
 			}
-			if (!Input.GetButton ("Fire"+i) || Input.GetButtonUp ("Fire"+i)) {
+			else {
 				fire [i] = false;
 			}
 

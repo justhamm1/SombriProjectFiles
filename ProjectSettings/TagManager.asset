@@ -10,6 +10,8 @@ TagManager:
   - Scene
   - Walls
   - Wind
+  - LedgeChecker
+  - Ledge
   layers:
   - Default
   - TransparentFX
