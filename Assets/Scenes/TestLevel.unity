@@ -1841,7 +1841,7 @@ MonoBehaviour:
   speedMultipler: 11
   jumpForce: 125
   jumpTime: 0.1
-  diForce: 50
+  diForce: 60
   groundedSpeed: 0
   holdingJump: 0
   grounded: 1
