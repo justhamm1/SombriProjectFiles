@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.34961268, g: 0.19272, b: 0.11435913, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -73,7 +73,7 @@ LightmapSettings:
     m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
-    m_BakeBackend: 1
+    m_BakeBackend: 0
     m_PVRSampling: 1
     m_PVRDirectSampleCount: 32
     m_PVRSampleCount: 500
@@ -90,7 +90,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000002, guid: b453fde5402fc3947a8df0c340fe9884,
+    type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
@@ -2176,6 +2177,7 @@ MonoBehaviour:
   hasUmbrella: 0
   velocityStore: 0
   umbrella: {fileID: 0}
+  wallChecker: {fileID: 0}
 --- !u!114 &406369776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4688,6 +4690,16 @@ Prefab:
     - target: {fileID: 1902671562905796, guid: 5ba57ca642aabd2469dce90a86e6aa55, type: 2}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114060904211580492, guid: 5ba57ca642aabd2469dce90a86e6aa55,
+        type: 2}
+      propertyPath: cantStab
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114060904211580492, guid: 5ba57ca642aabd2469dce90a86e6aa55,
+        type: 2}
+      propertyPath: hasUmbrella
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5ba57ca642aabd2469dce90a86e6aa55, type: 2}

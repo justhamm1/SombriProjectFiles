@@ -23476,7 +23476,7 @@ Prefab:
     - target: {fileID: 114060904211580492, guid: 5ba57ca642aabd2469dce90a86e6aa55,
         type: 2}
       propertyPath: maxSwaangs
-      value: 6
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5ba57ca642aabd2469dce90a86e6aa55, type: 2}

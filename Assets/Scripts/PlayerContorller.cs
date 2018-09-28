@@ -51,11 +51,22 @@ public class PlayerContorller : MonoBehaviour {
 	void Start () {
 		sound = GetComponent<AudioSource> ();
 		rb = GetComponent<Rigidbody> ();
-
+		//Application.targetFrameRate = 15;
 	}
 	
 
 	void FixedUpdate () {
+		
+		x = Input.GetAxis ("Horizontal") * speed * Time.deltaTime;
+
+		if (!inAir) {
+			latDrag = 1;
+			swaangsLeft = maxSwaangs;
+			calledLatDrag = false;
+			if (!isHolding) {
+				transform.Translate (x, 0, 0);	
+			}
+		} 
 
 		if (isPaused) {
 			Time.timeScale = 0;
@@ -135,16 +146,6 @@ public class PlayerContorller : MonoBehaviour {
 
 	void Update(){
 
-		x = Input.GetAxis ("Horizontal") * speed * Time.deltaTime;
-
-		if (!inAir) {
-			latDrag = 1;
-			swaangsLeft = maxSwaangs;
-			calledLatDrag = false;
-			if (!isHolding) {
-				transform.Translate (x, 0, 0);	
-			}
-		} 
 
 
 		if (Input.GetButtonDown("Fire1")) {
