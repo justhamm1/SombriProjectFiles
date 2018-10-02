@@ -51,7 +51,7 @@ public class PlayerContorller : MonoBehaviour {
 	void Start () {
 		sound = GetComponent<AudioSource> ();
 		rb = GetComponent<Rigidbody> ();
-		//Application.targetFrameRate = 15;
+		Application.targetFrameRate = 15;
 	}
 	
 
@@ -133,7 +133,7 @@ public class PlayerContorller : MonoBehaviour {
 		if (Input.GetButton ("Fire3")) {
 			rb.drag = 8;
 			umbrella.SetActive (true);
-			diForce = 140;
+			diForce = 220;
 		}
 		if (Input.GetButtonUp ("Fire3") || isHolding || !inAir) {
 			rb.drag = 0;
