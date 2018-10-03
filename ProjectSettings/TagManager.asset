@@ -12,6 +12,7 @@ TagManager:
   - Wind
   - LedgeChecker
   - Ledge
+  - Snakey
   layers:
   - Default
   - TransparentFX

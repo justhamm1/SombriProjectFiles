@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class PlayerContorller : MonoBehaviour {
 
+
+	public GameObject GUTS;
+
 	public float speed;
 	public float jumpForce;
 	public float jumpTime;
@@ -233,13 +236,27 @@ public class PlayerContorller : MonoBehaviour {
 			hasUmbrella = true;
 			Destroy (other.gameObject);
 		}
-		if (isHolding && other.tag != "Blocks") {
+		if (isHolding && other.tag != "Blocks" && other.tag != "Snakey") {
 			isHolding = false;
 			rb.isKinematic = true;
 			Invoke ("NotKinematic", 0.0001f);
 			isFalling = true;
 			CancelInvoke ("Drop");
 		}
+
+
+		if (other.tag == "Snakey") {
+			transform.parent = GUTS.transform;
+
+		}
+	}
+	void OnTriggerExit(Collider other){
+
+		if (other.tag == "Snakey") {
+			transform.parent = null;
+
+		}
+
 	}
 
 	void Drop(){
