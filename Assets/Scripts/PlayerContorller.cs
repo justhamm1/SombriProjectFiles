@@ -5,9 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class PlayerContorller : MonoBehaviour {
 
-
-	public GameObject GUTS;
-
 	public float speed;
 	public float jumpForce;
 	public float jumpTime;
@@ -228,8 +225,25 @@ public class PlayerContorller : MonoBehaviour {
 			this.enabled = false;
 			done = true;
 		}
-
+		if (other.gameObject.tag == "Ground") {
+			rb.velocity = new Vector3 (rb.velocity.x, 0);
+		}
 	}
+/*		
+	void OnCollisionStay(Collision other){
+
+		//if (other.gameObject.tag == "Ground") {
+			canJump = true;
+			inAir = false;
+			isFalling = false;
+	//	}
+	}
+	void OnCollisionExit(Collision other){
+		canJump = false;
+		inAir = true;
+		isFalling = false;
+	}
+*/
 	void OnTriggerStay(Collider other){
 
 		if (other.tag == "Umbrella") {
@@ -246,7 +260,7 @@ public class PlayerContorller : MonoBehaviour {
 
 
 		if (other.tag == "Snakey") {
-			transform.parent = GUTS.transform;
+		//	transform.parent = GUTS.transform;
 
 		}
 	}

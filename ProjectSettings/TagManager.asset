@@ -13,6 +13,7 @@ TagManager:
   - LedgeChecker
   - Ledge
   - Snakey
+  - Ground
   layers:
   - Default
   - TransparentFX
