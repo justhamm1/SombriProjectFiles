@@ -58,7 +58,11 @@ public class DirectionalLaunchControl : MonoBehaviour {
 	}
 
 		if (canFling && !contorller.isHolding) {
-			rb.velocity = -arrowHolder.transform.right * rotationSpeed * velocityMultiplyer;
+			
+			if(Input.GetButton("Fire2")){
+				rb.velocity = new Vector3 (0, 0, 0);
+			}else
+				rb.velocity = -arrowHolder.transform.right * rotationSpeed * velocityMultiplyer;
 			Invoke("LetGo", 0.0f);
 			arrow.SetActive (false);
 		}
@@ -105,6 +109,5 @@ public class DirectionalLaunchControl : MonoBehaviour {
 			StartCoroutine (IncreaseRotationSpeed ());
 
 
-	}
-		
+	}		
 }

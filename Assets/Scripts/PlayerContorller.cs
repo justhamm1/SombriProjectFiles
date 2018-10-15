@@ -24,7 +24,6 @@ public class PlayerContorller : MonoBehaviour {
 	public GameObject rocks;
 	public GameObject sparks;
 	public bool dead;
-	public PhysicMaterial bouncy;
 	public GameObject deathPoof;
 	Rigidbody rb;
 
@@ -33,6 +32,7 @@ public class PlayerContorller : MonoBehaviour {
 	public bool canJump;
 	public bool inAir;
 	public bool isHolding;
+	bool canWallJump;
 	bool calledLatDrag;
 	bool done;
 	bool hitGround;
@@ -98,7 +98,6 @@ public class PlayerContorller : MonoBehaviour {
 					calledLatDrag = true;
 					StartCoroutine (IncreaseLatDrag ());
 				}
-				transform.GetChild (0).gameObject.GetComponent<Collider> ().material = bouncy;
 			}
 
 
@@ -113,7 +112,7 @@ public class PlayerContorller : MonoBehaviour {
 			if (Physics.Raycast (downRay, out hit)) {
 				distance = hit.distance;
 				if (hit.distance < jumpResetDistance + 1) {
-					transform.GetChild (0).gameObject.GetComponent<Collider> ().material = null;	
+					
 				}
 
 				if (hit.distance <= jumpResetDistance) {
@@ -138,7 +137,7 @@ public class PlayerContorller : MonoBehaviour {
 		if (Input.GetButtonUp ("Fire3") || isHolding || !inAir) {
 			rb.drag = 0;
 			umbrella.SetActive (false);
-			diForce = 50;
+			diForce = 45;
 		}
 
 	}//Not Paused --------------
@@ -197,6 +196,44 @@ public class PlayerContorller : MonoBehaviour {
 					}
 				}
 			}
+// Wall Jump-----------------------------
+			RaycastHit hit;
+			Ray rightRay = new Ray (transform.position, Vector3.right);
+			Ray leftRay = new Ray (transform.position, Vector3.left);
+			Vector3 right = transform.TransformDirection(Vector3.right) * 1f;
+			Debug.DrawRay(transform.position, right, Color.green);
+			Debug.DrawRay(transform.position, -right, Color.red);
+
+			if (Physics.Raycast (rightRay, out hit)) {
+				if (hit.distance < 0.8f) {
+					if (Input.GetButtonDown ("Fire1") && canWallJump) {
+						int randy = Random.Range (0, jumps.Length);
+						sound.PlayOneShot (jumps [randy]);
+						canWallJump = false;
+						rb.velocity = new Vector3 (-7, 7, 0);
+						isFacingRight = false;
+						transform.GetChild (0).localRotation = Quaternion.Euler (0, 180, 0);
+					}
+				}
+			}
+
+			if (Physics.Raycast (leftRay, out hit)) {
+				if (hit.distance < 0.8f) {
+					if (Input.GetButtonDown ("Fire1") && canWallJump) {
+						int randy = Random.Range (0, jumps.Length);
+						sound.PlayOneShot (jumps [randy]);
+						canWallJump = false;
+						rb.velocity = new Vector3 (7, 7, 0);
+						isFacingRight = true;
+						transform.GetChild (0).localRotation = Quaternion.identity;
+					}
+				}
+			}
+			if (Input.GetButtonUp ("Fire1") && !canWallJump) {
+				canWallJump = true;
+			}
+
+
 		}
 	}
 
@@ -229,21 +266,32 @@ public class PlayerContorller : MonoBehaviour {
 			rb.velocity = new Vector3 (rb.velocity.x, 0);
 		}
 	}
-/*		
+		
 	void OnCollisionStay(Collision other){
 
-		//if (other.gameObject.tag == "Ground") {
-			canJump = true;
-			inAir = false;
-			isFalling = false;
-	//	}
+		if (inAir) {
+
+				
+		}
+
 	}
 	void OnCollisionExit(Collision other){
-		canJump = false;
-		inAir = true;
-		isFalling = false;
+
+		if (inAir) {
+		//	isFacingRight = !isFacingRight;
+
+		//	if (isFacingRight) {
+		//		isFacingRight = false;
+		//		transform.GetChild (0).localRotation = Quaternion.Euler (0, 180, 0);
+		//	}
+		//	if (!isFacingRight) {
+		//		isFacingRight = true;
+		//		transform.GetChild (0).localRotation = Quaternion.identity;
+
+			}
+		canWallJump = true;
 	}
-*/
+
 	void OnTriggerStay(Collider other){
 
 		if (other.tag == "Umbrella") {
@@ -251,6 +299,7 @@ public class PlayerContorller : MonoBehaviour {
 			Destroy (other.gameObject);
 		}
 		if (isHolding && other.tag != "Blocks" && other.tag != "Snakey") {
+			
 			isHolding = false;
 			rb.isKinematic = true;
 			Invoke ("NotKinematic", 0.0001f);
